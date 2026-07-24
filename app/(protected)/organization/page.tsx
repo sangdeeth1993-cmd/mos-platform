@@ -15,7 +15,15 @@ if (departmentsError) {
 }
 
 const departments = departmentsData ?? []
- const {data:people=[]}=await supabase.from('profiles').select('id,employee_id,display_name,email,role,active,departments(name)').order('employee_id')
+ const { data: peopleData, error: peopleError } = await supabase
+  .from('profiles')
+  .select(/* คง select เดิมไว้ */)
+
+if (peopleError) {
+  console.error('Failed to load people:', peopleError.message)
+}
+
+const people = peopleData ?? []
  const canAdmin=me?.role==='admin'
  return <main className="shell stack">
   <section className="card"><h1>Organization</h1><p className="muted">{(me as any)?.companies?.name} ({(me as any)?.companies?.code})</p></section>
