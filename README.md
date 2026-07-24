@@ -1,15 +1,34 @@
-# MOS Platform v1.0 Starter
+# MOS Platform — Sprint 1 Product Foundation
 
-โครงสร้างเริ่มต้นสำหรับระบบ Company Operating System แบบ Next.js + Supabase + Vercel
+สถานะ: Draft for Management Review  
+Version: 1.0  
+Date: 24 July 2026
 
-## เริ่มใช้งาน
-1. อัปโหลดไฟล์ทั้งหมดเข้า GitHub repository ใหม่หรือแทน repository เดิม
-2. Supabase SQL Editor: รัน `supabase/migrations/202607240001_initial_schema.sql`
-3. รัน `supabase/seed.sql`
-4. สร้าง Auth users และรัน `docs/03_link_auth_users.sql` หลังแก้ UUID ตามจริง
-5. Vercel Environment Variables:
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-6. Deploy
+ชุดเอกสารนี้เป็น Living Documentation สำหรับวางรากฐาน MOS Platform ก่อนพัฒนาโมดูล Production ต่อไป
 
-อ่านขั้นตอนภาษาไทยใน `docs/NEXT_STEPS_TH.md`
+## เอกสารในชุด
+
+1. `docs/product/01_PRODUCT_VISION_TH.md`
+2. `docs/product/02_PRD_V1_TH.md`
+3. `docs/product/03_ROLES_PERMISSION_MATRIX_TH.md`
+4. `docs/product/04_MODULE_AND_NAVIGATION_MAP_TH.md`
+5. `docs/workflows/05_CORE_WORKFLOWS_TH.md`
+6. `docs/architecture/06_SYSTEM_ARCHITECTURE_TH.md`
+7. `docs/architecture/07_DATA_MODEL_BLUEPRINT_TH.md`
+8. `docs/design/08_DESIGN_SYSTEM_TH.md`
+9. `docs/product/09_RELEASE_ROADMAP_TH.md`
+10. `docs/product/10_DECISION_LOG_TH.md`
+
+## ขอบเขต Release แรก
+
+Release แรกมุ่งสร้างระบบใช้งานจริงสำหรับ:
+- Authentication
+- Organization & Users
+- Projects
+- Tasks
+- Comments / Updates
+- Dashboard
+- Notifications
+- Audit Log
+
+โมดูล Finance, HR, Procurement, Asset และ AI จะออกแบบให้รองรับตั้งแต่สถาปัตยกรรม แต่ยังไม่รวมใน MVP แรก
