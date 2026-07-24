@@ -12,7 +12,7 @@ export default async function ProtectedLayout({children}:{children:React.ReactNo
   return <>
     <header className="top"><div className="shell">
       <div><div className="brand">MOS Platform</div><div style={{fontSize:13,opacity:.85}}>{profile.display_name} · {profile.employee_id} · {profile.role}</div></div>
-      <nav className="nav"><Link href="/dashboard">Home</Link><Link href="/organization">Organization</Link><Link href="/profile">Profile</Link></nav>
+      <nav className="nav"><Link href="/dashboard">Home</Link><Link href="/projects">Projects</Link><Link href="/organization">Organization</Link><Link href="/profile">Profile</Link></nav>
       <div className="header-actions"><LogoutButton/></div>
     </div></header>
     {children}
