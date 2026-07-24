@@ -7,7 +7,7 @@ export default async function NewProjectPage({searchParams}:{searchParams:Promis
   const supabase = await createClient()
   const { data, error } = await supabase
   .from('profiles')
-  .select('id,display_name')
+  .select('id,display_name,employee_id,role')
   .eq('active', true)
 
 if (error) {
