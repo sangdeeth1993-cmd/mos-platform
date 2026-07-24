@@ -38,21 +38,34 @@ export async function createProject(formData: FormData) {
   const sponsorId = text(formData, 'sponsor_id') || null
   const budgetValue = text(formData, 'budget')
 
-  const { data: project, error } = await supabase.from('projects').insert({
-    company_id: profile.company_id,
-    code,
-    name,
-    description: text(formData, 'description') || null,
-    owner_id: ownerId,
-    sponsor_id: sponsorId,
-    start_date: text(formData, 'start_date') || null,
-    target_end_date: text(formData, 'target_end_date') || null,
-    priority: priorities.includes(text(formData, 'priority') as any) ? text(formData, 'priority') : 'medium',
-    status: 'planning',
-    health: 'green',
-    budget: budgetValue ? Number(budgetValue) : null,
-    created_by: profile.id,
-  }).select('id').single()
+  const payload = {
+  company_id: profile.company_id,
+  code,
+  name,
+  description: text(formData, 'description') || null,
+  owner_id: ownerId,
+  sponsor_id: sponsorId,
+  start_date: text(formData, 'start_date') || null,
+  target_end_date: text(formData, 'target_end_date') || null,
+  priority: priorities.includes(text(formData, 'priority') as any)
+    ? text(formData, 'priority')
+    : 'medium',
+  status: 'planning',
+  health: 'green',
+  budget: budgetValue ? Number(budgetValue) : null,
+  created_by: profile.id,
+}
+
+console.log('PROFILE', profile)
+console.log('PROJECT PAYLOAD', payload)
+
+const { data: project, error } = await supabase
+  .from('projects')
+  .insert(payload)
+  .select('id')
+  .single()
+
+console.log('CREATE PROJECT ERROR', error)
 
   if (error || !project) redirect(`/projects/new?error=${encodeURIComponent(error?.message || 'create_failed')}`)
 
