@@ -13,7 +13,13 @@ export default async function ProjectsPage({searchParams}:{searchParams:Promise<
   let query = supabase.from('projects_view').select('*').order('updated_at',{ascending:false})
   if (params.status && params.status !== 'all') query = query.eq('status', params.status)
   if (params.q) query = query.or(`name.ilike.%${params.q}%,code.ilike.%${params.q}%`)
-  const { data: projects = [], error } = await query
+  const { data: projectsData, error } = await query
+
+if (error) {
+  console.error('Failed to load projects:', error.message)
+}
+
+const projects = projectsData ?? []
   const canCreate = ['manager','executive','admin'].includes(profile?.role || '')
   const active = projects.filter((p:any)=>p.status==='active').length
   const atRisk = projects.filter((p:any)=>p.health==='red').length
