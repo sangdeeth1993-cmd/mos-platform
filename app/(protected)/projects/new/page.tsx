@@ -5,7 +5,16 @@ import { createProject } from '../actions'
 export default async function NewProjectPage({searchParams}:{searchParams:Promise<{error?:string}>}) {
   const params = await searchParams
   const supabase = await createClient()
-  const { data: profiles = [] } = await supabase.from('profiles').select('id,display_name,employee_id,role').eq('active',true).order('display_name')
+  const { data, error } = await supabase
+  .from('profiles')
+  .select('id,display_name')
+  .eq('active', true)
+
+if (error) {
+  console.error('Failed to load profiles:', error.message)
+}
+
+const profiles = data ?? []
   return <main className="shell narrow stack">
     <div><Link className="back-link" href="/projects">← Projects</Link><h1>สร้างโครงการใหม่</h1><p className="muted">กำหนดข้อมูลหลักก่อน แล้วจึงเพิ่มสมาชิกและ Milestone ในหน้ารายละเอียด</p></div>
     {params.error && <div className="notice error">ไม่สามารถสร้างโครงการได้: {decodeURIComponent(params.error)}</div>}
