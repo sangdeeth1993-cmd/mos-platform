@@ -4,9 +4,10 @@ export default async function Dashboard(){
  const supabase=await createClient()
  const {data:{user}}=await supabase.auth.getUser()
  const {data:profile}=await supabase.from('profiles').select('id,display_name,employee_id,role,companies(name),departments(name)').eq('auth_id',user!.id).single()
- const {data:tasks=[]}=await supabase.from('tasks').select('id,title,status,priority,progress,due_date,projects(name)').eq('assignee_id',profile?.id).order('due_date',{ascending:true})
+ const {data,error}=await supabase.from('tasks').select('id,title,status,priority,progress,due_date,projects(name)').eq('assignee_id',profile?.id).order('due_date',{ascending:true})
+ const tasks=data??[]
  const today=new Date();today.setHours(0,0,0,0)
- const open=tasks.filter((t:any)=>!['completed','cancelled'].includes(t.status))
+ const open=tasks.filter(...)
  const overdue=open.filter((t:any)=>t.due_date&&new Date(t.due_date+'T00:00:00')<today)
  const completed=tasks.filter((t:any)=>t.status==='completed')
  return <main className="shell stack">
