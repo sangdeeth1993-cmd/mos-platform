@@ -12,12 +12,42 @@ export default async function ProjectDetailPage({params}:{params:Promise<{id:str
   const { data: me } = await supabase.from('profiles').select('id,role').eq('auth_id',user!.id).single()
   const { data: project } = await supabase.from('projects_view').select('*').eq('id',id).single()
   if (!project) notFound()
-  const [{ data: members=[] },{ data: people=[] },{ data: milestones=[] },{ data: activity=[] }] = await Promise.all([
-    supabase.from('project_members').select('profile_id,project_role,profiles(display_name,employee_id,role)').eq('project_id',id).order('joined_at'),
-    supabase.from('profiles').select('id,display_name,employee_id,role').eq('active',true).order('display_name'),
-    supabase.from('project_milestones').select('*').eq('project_id',id).order('sort_order').order('due_date'),
-    supabase.from('project_activity').select('id,action,details,created_at,profiles:actor_id(display_name)').eq('project_id',id).order('created_at',{ascending:false}).limit(20),
-  ])
+  const [
+  membersResult,
+  peopleResult,
+  milestonesResult,
+  activityResult,
+] = await Promise.all([
+  supabase
+    .from('project_members')
+    .select('profile_id,project_role,profiles(display_name,employee_id,role)')
+    .eq('project_id', id)
+    .order('joined_at'),
+
+  supabase
+    .from('profiles')
+    .select('id,display_name,employee_id,role')
+    .eq('active', true)
+    .order('display_name'),
+
+  supabase
+    .from('project_milestones')
+    .select('*')
+    .eq('project_id', id)
+    .order('sort_order')
+    .order('due_date'),
+
+  supabase
+    .from('project_activity')
+    .select('id,action,details,created_at,profiles:actor_id(display_name)')
+    .eq('project_id', id)
+    .order('created_at', { ascending: false }),
+])
+
+const members = membersResult.data ?? []
+const people = peopleResult.data ?? []
+const milestones = milestonesResult.data ?? []
+const activity = activityResult.data ?? []
   const canManage = ['executive','admin'].includes(me?.role||'') || members.some((m:any)=>m.profile_id===me?.id&&['lead','sponsor'].includes(m.project_role))
   const money = project.budget==null?'-':new Intl.NumberFormat('th-TH',{style:'currency',currency:'THB',maximumFractionDigits:0}).format(project.budget)
 
