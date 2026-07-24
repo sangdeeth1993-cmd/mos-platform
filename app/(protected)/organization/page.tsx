@@ -5,7 +5,16 @@ export default async function OrganizationPage(){
  const supabase=await createClient()
  const {data:{user}}=await supabase.auth.getUser()
  const {data:me}=await supabase.from('profiles').select('company_id,role,companies(name,code)').eq('auth_id',user!.id).single()
- const {data:departments=[]}=await supabase.from('departments').select('id,code,name,active').order('code')
+ const {data:departmentsData,error:departmentsError}=await supabase.from('departments').select('*').order('code')
+
+if (departmentsError) {
+  console.error(
+    'Failed to load departments:',
+    departmentsError.message
+  )
+}
+
+const departments = departmentsData ?? []
  const {data:people=[]}=await supabase.from('profiles').select('id,employee_id,display_name,email,role,active,departments(name)').order('employee_id')
  const canAdmin=me?.role==='admin'
  return <main className="shell stack">
